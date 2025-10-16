@@ -1,0 +1,304 @@
+/* MAIN LOGO Font Titillium Web  */
+/* Text phont Nanum Gothic   */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Global Styles */
+body {
+  background: linear-gradient(135deg, #0d1b2a, #1b263b, #415a77);
+  color: white;
+  font-family: 'Titillium Web', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-attachment: fixed;
+  background-size: cover;
+}
+/* option 2 for the gradient
+body {
+  background: radial-gradient(circle at center, #1b263b 0%, #0d1b2a 70%);
+  color: white;
+}
+
+option3 pattern
+body {
+  background:
+    linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(65, 90, 119, 0.95)),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.05) 0,
+      rgba(255, 255, 255, 0.05) 2px,
+      transparent 2px,
+      transparent 6px
+    );
+  background-blend-mode: overlay;
+  color: white;
+}
+
+
+*/
+
+
+/* Header */
+header {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #ffffff;
+  border-bottom: 1px solid #ffffff;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+    url('images/back1.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: grayscale(10%);
+  animation: fadeIn 2s ease-in-out;
+  padding: 6rem 4rem; /* Makes the photo longer*/
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(0px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+header h1 {
+  font-family: 'Titillium Web', sans-serif;
+  font-weight: 300;     /* bold but not too thick */
+  letter-spacing: 1px;  /* subtle spacing adds elegance */
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+  font-size: 2.5rem;
+  margin-bottom: 0;
+  text-shadow: 0 0 10px #0c5993, 0 0 100px #0c5993;
+}
+
+header h2 {
+  font-family: 'Titillium Web', sans-serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  margin: -0.2rem 0 0 0;
+  color: #ffffff;       /* softer gold accent */
+  letter-spacing: 3px;
+}
+
+
+header p {
+  margin-top: 0.3rem; /* small space before tagline */
+  color: #bda77d;
+}
+
+/* Hero Image */
+.hero img {
+  width: 100%;
+  max-height: 700px;
+  object-fit: cover;
+  border-bottom: 2px solid #ffffff;
+}
+
+/* Gallery */
+.gallery {
+  padding: 3rem;
+  text-align: center;
+}
+
+.gallery h2 {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 400;
+  color: #ffffff;
+  font-size: 2rem;
+}
+
+.gallery .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #444;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  transition: transform 0.3s;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  border: 1px solid #ffffff;
+}
+
+/* About */
+.about {
+  padding: 3rem;
+  max-width: 800px;
+  margin: auto;
+  font-size: 1.1rem;
+}
+
+.about h2 {
+  color: #d4af37;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  background: #111;
+  color: #aaa;
+  border-top: 2px solid #d4af37;
+}
+
+/* Dropdown Menu - Upper Left with Hamburger */
+.dropdown {
+  position: fixed;
+  top: 20px;   
+  left: 20px;  
+  z-index: 1000; 
+}
+
+.dropbtn {
+  background: #0095ff;
+  border: none;
+  padding: 6px 6px; /* small padding */
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 24px;  /* height of hamburger */
+  width: 30px;   /* width of hamburger */
+}
+
+.dropbtn .bar {
+  display: block;
+  width: 100%;
+  height: 2px;    /* thickness of each line */
+  background-color: white;
+  border-radius: 2px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 35px; /* below button */
+  left: 0;
+  background-color: #c59c34;
+  border-radius: 6px;
+  overflow: hidden;
+  min-width: 140px;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 12px 16px;
+  color: white;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover {
+  background-color: #014f86;
+}
+
+.show {
+  display: block;
+}
+
+/* Show dropdown when active */
+.show {
+  display: block;
+}
+
+.dropbtn {
+  background: #020d3d;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 24px; /* height of the hamburger */
+  width: 30px;
+}
+
+.dropbtn .bar {
+  display: block;
+  width: 100%;
+  height: 4px;
+  background-color: white;
+  border-radius: 2px;
+}
+
+/* Gallery hover effect */
+.gallery .grid {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.watch-card img {
+  width: 300px;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.watch-card:hover img {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+/* Modal background */
+.modal {
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal content box */
+.modal-content {
+  background: #111;
+  color: #d4af37;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 700px;
+  width: 90%;
+  text-align: center;
+}
+
+.modal-images {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 1rem;
+}
+
+.modal-images img {
+  flex: 0 0 auto;
+  max-width: 300px;
+  border-radius: 10px;
+  scroll-snap-align: center;
+}
+
+
+/* Close button */
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #d4af37;
+  font-size: 2rem;
+  cursor: pointer;
+}

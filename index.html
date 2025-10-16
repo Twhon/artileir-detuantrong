@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artileir De Tuan Trong</title>
+  <link rel="stylesheet" href="style.css">
+ <link href="https://fonts.googleapis.com/css2?family=Titillium Web:wght@400;500;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Nanum Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+
+
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>Artileir De Tuan Trong</h1>
+    <h2>EST. 2024</h2>
+    <p>Handcrafted Mechanical Timepieces</p>
+  </header>
+
+
+
+  <!-- Gallery -->
+  <section class="gallery">
+    <h2>The Archive</h2>
+    <section class="gallery">
+  <h2>The Archive</h2>
+  <div class="grid">
+    <div class="watch-card" onclick="openModal('watch1')">
+      <img src="images/watch1.jpg" alt="Watch 1">
+      <h2>whta 1</h2>
+    </div>
+    <div class="watch-card" onclick="openModal('watch2')">
+      <img src="images/watch2.jpg" alt="Watch 2">
+      <h2>watch 2</h2>
+    </div>
+    <div class="watch-card" onclick="openModal('watch3')">
+      <img src="images/watch3.jpg" alt="Watch 3">
+      <h2>watch 3</h2>
+    </div>
+    <div class="watch-card" onclick="openModal('watch1')">
+      <img src="images/watch1.jpg" alt="Watch 1">
+      <h2>whta 4</h2>
+    </div>
+    <div class="watch-card" onclick="openModal('watch2')">
+      <img src="images/watch2.jpg" alt="Watch 2">
+      <h2>watch 5</h2>
+    </div>
+    <div class="watch-card" onclick="openModal('watch3')">
+      <img src="images/watch3.jpg" alt="Watch 3">
+      <h2>watch 6</h2>
+    </div>
+  </div>
+</section>
+
+
+  <!-- About -->
+  <section class="about">
+    <h2>The Story</h2>
+    <p>
+      bigpoooooppp
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Contact: the eamilcenemail.com | Instagram: @youndindirhandle</p>
+  </footer>
+
+  <!-- Hamburger Dropdown Menu (Upper Left) -->
+<div class="dropdown">
+  <button onclick="toggleDropdown()" class="dropbtn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+  <div id="myDropdown" class="dropdown-content">
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</div>
+<!-- Modal -->
+<div id="imageModal" class="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <div class="modal-content" id="modalContent">
+    <!-- Dynamic content goes here -->
+  </div>
+</div>
+
+
+  <script>
+  // Dropdown menu
+  function toggleDropdown() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn') && !event.target.matches('.bar')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      for (var i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].classList.remove('show');
+      }
+    }
+  }
+
+  // Modal popup
+  function openModal(watchId) {
+    const modal = document.getElementById("imageModal");
+    const content = document.getElementById("modalContent");
+
+    // Customize per watch (you can expand this)
+    const watchInfo = {
+      watch1: {
+        title: "Chronometre I",
+        images: ["images/watch1.jpg", "images/watch1-detail.jpg"],
+        specs: "Movement: NH35 • Case: 36mm Steel • Dial: Brushed Blue"
+      },
+      watch2: {
+        title: "Chronometre II",
+        images: ["images/watch2.jpg", "images/watch2-detail.jpg"],
+        specs: "Movement: Miyota 9039 • Case: 38mm Titanium • Dial: Black"
+      },
+      watch3: {
+        title: "Chronometre III",
+        images: ["images/watch3.jpg", "images/watch3-detail.jpg"],
+        specs: "Movement: NH36 • Case: 37mm Bronze • Dial: Textured Green"
+      }
+    };
+
+    const w = watchInfo[watchId];
+    content.innerHTML = `
+  <h2>${w.title}</h2>
+  <div class="modal-images">
+    ${w.images.map(src => `<img src="${src}" alt="${w.title}">`).join('')}
+  </div>
+  <p>${w.specs}</p>
+`;
+
+
+    modal.style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+  }
+
+ 
+</script>
+
+</body>
+</html>
