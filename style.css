@@ -1,5 +1,6 @@
 /* MAIN LOGO Font Titillium Web  */
 /* Text phont Nanum Gothic   */
+/*Main color pallet*/
 html {
   scroll-behavior: smooth;
 }
@@ -140,7 +141,7 @@ header p {
 }
 
 .about h2 {
-  color: #d4af37;
+  color: #ffffff;
 }
 
 /* Footer */
@@ -149,7 +150,7 @@ footer {
   padding: 1.5rem;
   background: #111;
   color: #aaa;
-  border-top: 2px solid #d4af37;
+  border-top: 2px solid #ffffff;
 }
 
 /* Dropdown Menu - Upper Left with Hamburger */
