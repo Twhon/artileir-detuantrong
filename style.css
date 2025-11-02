@@ -134,14 +134,20 @@ header p {
 
 /* About */
 .about {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 400;
+  color: #ffffff;
+  font-size: 2rem;
   padding: 3rem;
   max-width: 800px;
   margin: auto;
-  font-size: 1.1rem;
+
 }
 
 .about h2 {
+  
   color: #ffffff;
+ 
 }
 
 /* Footer */
@@ -270,7 +276,7 @@ footer {
 /* Modal content box */
 .modal-content {
   background: #111;
-  color: #d4af37;
+  color: #ffffff;
   padding: 2rem;
   border-radius: 10px;
   max-width: 700px;
