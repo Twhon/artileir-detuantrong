@@ -65,12 +65,12 @@ header {
 
 header h1 {
   font-family: 'Titillium Web', sans-serif;
-  font-weight: 300;     /* bold but not too thick */
+  font-weight: 400;     /* bold but not too thick */
   letter-spacing: 1px;  /* subtle spacing adds elegance */
   text-transform: uppercase;
   margin: 0;
   line-height: 1;
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   margin-bottom: 0;
   text-shadow: 0 0 10px #0c5993, 0 0 100px #0c5993;
 }
@@ -79,7 +79,7 @@ header h1 {
 header h2 {
   font-family: 'Titillium Web', sans-serif;
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   text-transform: uppercase;
   margin: -0.2rem 0 0 0;
   color: #ffffff;       /* softer gold accent */
@@ -90,6 +90,7 @@ header h2 {
 header p {
   margin-top: 0.3rem; /* small space before tagline */
   color: #bda77d;
+   font-size: 1.1rem;
 }
 
 /* Hero Image */
@@ -102,15 +103,15 @@ header p {
 
 /* Gallery */
 .gallery {
-  padding: 7rem;
+  padding: 5rem;
   text-align: center;
 }
 
 .gallery h2 {
   /*Watch name*/
-  margin-top: 1rem;
+  margin-top: 0rem;
   font-family: 'Nanum Gothic', sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   color: #ffffff;
   font-size: 2rem;
   margin-bottom: 2rem;
