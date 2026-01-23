@@ -11,6 +11,17 @@
 
 </head>
 <body>
+  <script>
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    closeModal();
+  }
+});
+</script>
+
+    <!-- Backroundstuff -->
+  <div class="background-effects"></div>
+
   <!-- Header -->
   <header>
     <h1>Artileir De Tuan Trong</h1>
@@ -25,29 +36,41 @@
   <section class="gallery">
   <h2>The Archive</h2>
   <div class="grid">
-    <div class="watch-card" onclick="openModal('watch1')">
-      <img src="images/watch1.jpg" alt="Watch 1">
-      <h2>The Mountaineer</h2>
+    <div class="watch-card" onclick="openModal('P1')">
+      <img src="images/P-1/P1a.JPEG" alt="Watch 1">
+      <h2>Debuts</h2>
     </div>
-    <div class="watch-card" onclick="openModal('watch1')">
-      <img src="images/watch1.jpg" alt="Watch 1">
-      <h2>Redbull</h2>
+    <div class="watch-card" onclick="openModal('P2')">
+      <img src="images/P-2/P2a.JPEG" alt="Watch 1">
+      <h2>Jour Openwork</h2>
     </div>
-    <div class="watch-card" onclick="openModal('watch1')">
-      <img src="images/watch1.jpg" alt="Watch 1">
-      <h2>Fluted</h2>
-    </div>
-    <div class="watch-card" onclick="openModal('watch1')">
-      <img src="images/watch1.jpg" alt="Watch 1">
-      <h2>Bruce Wayne</h2>
-    </div>
-    <div class="watch-card" onclick="openModal('watch1')">
-      <img src="images/watch1.jpg" alt="Watch 1">
+    <div class="watch-card" onclick="openModal('P3')">
+      <img src="images/P-3/2.JPEG" alt="Watch 1">
       <h2>Midnight Bloom</h2>
     </div>
-    <div class="watch-card" onclick="openModal('watch1')">
-      <img src="images/watch1.jpg" alt="Watch 1">
-      <h2>skel dive</h2>
+    <div class="watch-card" onclick="openModal('T24')">
+      <img src="images/T-24/24 F.JPEG" alt="Watch 1">
+      <h2>Montagne Openwork</h2>
+    </div>
+    <div class="watch-card" onclick="openModal('T25')">
+      <img src="images/T-25/1.JPEG" alt="Watch 1">
+      <h2>Arabic Fluted</h2>
+    </div>
+    <div class="watch-card" onclick="openModal('T26')">
+      <img src="images/T-26/4.JPEG" alt="Watch 1">
+      <h2>Lumiere Nior</h2> 
+    </div>
+    <div class="watch-card" onclick="openModal('T27')">
+      <img src="images/T-27/1.JPEG" alt="Watch 1">
+      <h2>RedBull Openwork</h2>
+    </div>
+    <div class="watch-card" onclick="openModal('T28')">
+      <img src="images/T-28/IMG_3466.JPEG" alt="Watch 1">
+      <h2>Bruce Wayne Openwork</h2>
+    </div>
+    <div class="watch-card" onclick="openModal('P4')">
+      <img src="images/P-4/IMG_3232.JPEG" alt="Watch 1">
+      <h2>Lisse Argent</h2>
     </div>
   </div>
 </section>
@@ -127,20 +150,50 @@
 
     // Customize per watch (you can expand this)
     const watchInfo = {
-      watch1: {
-        title: "BatMan",
-        images: ["images/watch1.jpg", "images/watch1.jpg", "images/watch1.jpg", "images/watch1.jpg", "images/watch1.jpg", "images/watch1.jpg"],
-        specs: "Movement: NH35 • Case: 36mm Steel • Dial: Brushed Blue"
+      P1: {
+        title: "Debuts",
+        images: ["images/P-1/P1a.JPEG", "images/P-1/P1b.JPEG"],
+        specs: "Movement: Miyota 8N24 • Case: 40mm Stainless Steel • Complication: Openwork"
       },
-      watch2: {
-        title: "Chronometre II",
-        images: ["images/watch2.jpg", "images/watch2-detail.jpg"],
-        specs: "Movement: Miyota 9039 • Case: 38mm Titanium • Dial: Black"
+      P2: {
+        title: "Jour Openwork",
+        images: ["images/P-2/P2a.JPEG", "images/P-2/p2g.JPEG", "images/P-2/P2c.JPEG", "images/P-2/P2f.JPEG"],
+        specs: "Movement: ETA 2824-2 • Case: 38mm Stainless Steel • Complication: Openwork"
       },
-      watch3: {
-        title: "Chronometre III",
-        images: ["images/watch3.jpg", "images/watch3-detail.jpg"],
-        specs: "Movement: NH36 • Case: 37mm Bronze • Dial: Textured Green"
+      P3: {
+        title: "Midnight Bloom",
+        images: ["images/P-3/2.JPEG", "images/P-3/1.JPEG"],
+        specs: "Movement: Miyota 9015 • Case: 40mm Stainless Steel • Complication: Date"
+      },
+      T24: {
+        title: "Montagne Openwork",
+        images: ["images/T-24/24 F.JPEG", "images/T-24/24 L.JPEG", "images/T-24/24 B.JPEG", "images/T-24/lume.JPEG"],
+        specs: "Movement: 8N24 • Case: 36mm Stainless Steel • Complication: Openwork"
+      },
+      T25: {
+        title: "Arabic Fluted",
+        images: ["images/T-25/1.JPEG", "images/T-25/2.JPEG","images/T-25/3.JPEG","images/T-25/4.JPEG"],
+        specs: "Movement: Miyota 9015 • Case: 36mm Stainless Steel • Complication: Date"
+      },
+      T26: {
+        title: "Lumiere Nior",
+        images: ["images/T-26/4.JPEG", "images/T-26/3.JPEG","images/T-26/7.JPEG","images/T-26/5.JPEG","images/T-26/1.JPEG","images/T-26/0.JPEG","images/T-26/2.JPEG"],
+        specs: "Movement: Miyota 8215 • Case: 40mm Stainless Steel • Complication: Date"
+      },
+      T27: {
+        title: "RedBull Openwork",
+        images: ["images/T-27/1.JPEG", "images/T-27/2.JPEG","images/T-27/4.JPEG","images/T-27/5.JPEG","images/T-27/6.JPEG"],
+        specs: "Movement: Miyota 8N24 • Case: 40mm Stainless Steel • Complication: Openwork"
+      },
+      T28: {
+        title: "Bruce Wayne Openwork",
+        images: ["images/T-28/IMG_3466.JPEG", "images/T-28/IMG_3467.JPEG","images/T-28/IMG_3468.JPEG","images/T-28/IMG_3473.JPEG","images/T-28/IMG_3451.JPEG"],
+        specs: "Movement: Miyota 8N24 • Case: 40mm Stainless Steel • Complication: Openwork"
+      },
+      P4: {
+        title: "Lisse Argent",
+        images: ["images/P-4/IMG_3233.JPEG", "images/P-4/IMG_3235.JPEG","images/P-4/IMG_3236.JPEG","images/P-4/IMG_3240.JPEG","images/P-4/IMG_3251.JPEG"],
+        specs: "Movement: Miyota 9015 • Case: 40mm Stainless Steel • Complication: Date"
       }
     };
 

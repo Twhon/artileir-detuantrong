@@ -7,14 +7,67 @@ html {
 
 /* Global Styles */
 body {
-  background: linear-gradient(135deg, #0d1b2a, #1b263b, #415a77);
-  color: white;
-  font-family: 'Titillium Web', sans-serif;
   margin: 0;
-  padding: 0;
+  font-family: 'Nanum Gothic', sans-serif;
+  color: white;
+  overflow-x: hidden;
+
+  background:
+    radial-gradient(circle at 20% 20%, rgba(212,175,55,0.15), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 45%),
+    linear-gradient(135deg, #0d1b2a, #1b263b, #415a77);
+
   background-attachment: fixed;
-  background-size: cover;
 }
+
+.background-effects {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Gold glow */
+.background-effects::before {
+  content: "";
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  top: -250px;
+  left: -250px;
+  background: radial-gradient(circle, rgba(212,175,55,0.18), transparent 70%);
+  filter: blur(100px);
+  animation: floatSlow 30s ease-in-out infinite alternate;
+}
+
+/* White glow */
+.background-effects::after {
+  content: "";
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  bottom: -400px;
+  right: -400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);
+  filter: blur(120px);
+  animation: floatSlow 35s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatSlow {
+  from { transform: translateY(0); }
+  to { transform: translateY(-60px); }
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  z-index: 0;
+}
+
 /* option 2 for the gradient
 body {
   background: radial-gradient(circle at center, #1b263b 0%, #0d1b2a 70%);
@@ -39,6 +92,51 @@ body {
 
 */
 
+
+
+/* BACKDROP LAYER */
+.background-effects {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Soft glow curve */
+.background-effects::before {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: -200px;
+  left: -200px;
+  background: radial-gradient(circle, rgba(212,175,55,0.15), transparent 70%);
+  filter: blur(90px);
+  border-radius: 50%;
+}
+
+/* Subtle white curve */
+.background-effects::after {
+  content: "";
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  bottom: -300px;
+  right: -300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
+  filter: blur(110px);
+  border-radius: 50%;
+}
+
+@keyframes floatGlow {
+  from { transform: translateY(0); }
+  to { transform: translateY(-40px); }
+}
+
+.background-effects::before,
+.background-effects::after {
+  animation: floatGlow 20s ease-in-out infinite alternate;
+}
 
 /* Header */
 header {
@@ -332,6 +430,21 @@ footer a:hover {
   max-width: 400px;
   border-radius: 10px;
   scroll-snap-align: center;
+}
+
+@media (max-width: 768px) {
+  .modal-images {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gallery img {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.gallery img:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(212,175,55,0.35);
 }
 
 
