@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trong Horology</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #d4bc8a;
+  --gold-light: #e8d9b8;
+  --gold-dim: #9a8a6a;
+  --gold-pale: #f5f0e8;
+  --dark: #060608;
+  --dark2: #0b0b0f;
+  --dark3: #111118;
+  --navy: #070d18;
+  --text: #ede8dc;
+  --text-dim: #7a7060;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Inter', sans-serif;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--text);font-family:var(--sans);font-weight:300;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--dark)}
+::-webkit-scrollbar-thumb{background:var(--gold-dim)}
+
+/* ── BOTANICAL CANVAS ── */
+#botanicalCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.85}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 3.5rem;
+  transition:background 0.5s,backdrop-filter 0.5s;
+}
+nav.scrolled{background:rgba(6,6,8,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,168,76,0.07)}
+
+.nav-left{display:flex;align-items:center;gap:1rem}
+.logo-box{
+  width:44px;height:44px;border:1px solid rgba(201,168,76,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.42rem;letter-spacing:0.1em;color:var(--gold-dim);text-transform:uppercase;
+}
+.logo-box img{width:100%;height:100%;object-fit:contain;display:none}
+.logo-box img.loaded{display:block}
+.nav-brand{font-family:var(--serif);font-size:1.3rem;font-weight:300;letter-spacing:0.25em;color:var(--gold)}
+
+.nav-right{display:flex;align-items:center;gap:2.5rem}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:0.58rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color 0.3s}
+.nav-links a:hover{color:var(--gold)}
+
+.nav-clock-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:0.1rem}
+.nav-clock{font-family:'Inter',sans-serif;font-size:1.35rem;color:var(--gold);letter-spacing:0.08em;font-weight:200;line-height:1}
+.nav-date{font-size:0.45rem;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;font-weight:300}
+
+/* ── LANDING ── */
+#landing{
+  position:fixed;inset:0;z-index:1000;
+  background:var(--dark);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 1.4s ease,visibility 1.4s ease;
+}
+#landing.gone{opacity:0;visibility:hidden;pointer-events:none}
+#landingClock{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.28;pointer-events:none;z-index:1}
+#siteClock{display:none;}
+
+.landing-brand{position:relative;z-index:10;text-align:center}
+.landing-name{
+  font-family:var(--serif);font-size:clamp(3.5rem,11vw,9rem);font-weight:300;
+  letter-spacing:0.35em;
+  color:transparent;
+  background:linear-gradient(135deg,var(--gold-dim),var(--gold-light),var(--gold),var(--gold-dim));
+  -webkit-background-clip:text;background-clip:text;
+  opacity:0;animation:nameReveal 3.8s ease 0.6s forwards;
+  filter:drop-shadow(0 0 40px rgba(201,168,76,0.25));
+}
+@keyframes nameReveal{
+  0%{opacity:0;letter-spacing:0.9em}
+  60%{opacity:0.8}
+  100%{opacity:1;letter-spacing:0.35em}
+}
+.landing-sub{font-size:0.62rem;letter-spacing:0.5em;color:var(--gold-dim);opacity:0;animation:fadeUp 1.5s ease 3.2s forwards;margin-top:1.2rem;text-transform:uppercase}
+.landing-enter{
+  margin-top:3rem;padding:0.9rem 3rem;
+  background:transparent;border:1px solid var(--gold-dim);
+  color:var(--gold);font-family:var(--sans);font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;
+  cursor:pointer;opacity:0;animation:fadeUp 1.5s ease 4s forwards;
+  transition:all 0.4s;position:relative;overflow:hidden;
+}
+.landing-enter::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.08),transparent);transition:left 0.5s}
+.landing-enter:hover::before{left:100%}
+.landing-enter:hover{border-color:var(--gold);box-shadow:0 0 25px rgba(201,168,76,0.12)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO ── */
+.hero{
+  position:relative;height:100vh;min-height:650px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:radial-gradient(ellipse 60% 70% at 50% 55%,rgba(201,168,76,0.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity 2s ease}
+.hero-video.ready{opacity:0.35}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(6,6,8,0.5) 0%,rgba(6,6,8,0.88) 100%);pointer-events:none}
+
+.dust{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.dust span{position:absolute;width:2px;height:2px;border-radius:50%;background:var(--gold);opacity:0;animation:drift var(--d,8s) ease-in-out infinite var(--delay,0s)}
+@keyframes drift{
+  0%{opacity:0;transform:translateY(60px) translateX(0)}
+  20%{opacity:0.3}80%{opacity:0.1}
+  100%{opacity:0;transform:translateY(-80px) translateX(var(--dx,20px))}
+}
+
+.hero-content{position:relative;z-index:3}
+.hero-logo-wrap{opacity:0;animation:fadeUp 1s ease 0.3s forwards;margin-bottom:2rem}
+.hero-logo-wrap img{height:60px;width:auto;object-fit:contain;filter:brightness(0) invert(1) sepia(1) saturate(1.5) hue-rotate(5deg) brightness(0.85)}
+.hero-eyebrow{font-size:0.62rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease 0.5s forwards}
+.hero-title{font-family:var(--serif);font-size:clamp(3.5rem,9vw,8rem);font-weight:300;line-height:0.9;letter-spacing:-0.01em;color:var(--text);opacity:0;animation:fadeUp 1.1s ease 0.8s forwards}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-subtitle{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(237,232,220,0.45);margin-top:2rem;opacity:0;animation:fadeUp 1.1s ease 1.1s forwards}
+.hero-cta{margin-top:3.5rem;opacity:0;animation:fadeUp 1s ease 1.4s forwards;display:flex;gap:1.5rem;align-items:center;justify-content:center}
+.btn-primary{font-family:var(--sans);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--dark);background:var(--gold);border:none;padding:1rem 2.5rem;cursor:pointer;text-decoration:none;transition:background 0.3s,transform 0.2s}
+.btn-primary:hover{background:var(--gold-pale);transform:translateY(-1px)}
+.btn-ghost{font-family:var(--sans);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.35);padding:1rem 2.5rem;cursor:pointer;text-decoration:none;transition:all 0.3s}
+.btn-ghost:hover{border-color:var(--gold);background:rgba(201,168,76,0.06)}
+
+.scroll-ind{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;opacity:0;animation:fadeUp 1s ease 2s forwards;z-index:3}
+.scroll-ind span{font-size:0.5rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(201,168,76,0.4)}
+.scroll-line{width:1px;height:3rem;background:linear-gradient(to bottom,rgba(201,168,76,0.55),transparent);animation:sPulse 2.5s ease-in-out infinite}
+@keyframes sPulse{0%,100%{opacity:0.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.1)}}
+
+/* ── MARQUEE ── */
+.marquee-wrap{overflow:hidden;border-top:1px solid rgba(201,168,76,0.12);border-bottom:1px solid rgba(201,168,76,0.12);padding:1rem 0;background:rgba(7,13,24,0.7);position:relative;z-index:1}
+.marquee-track{display:flex;width:max-content;animation:marquee 35s linear infinite}
+.marquee-track span{font-family:var(--serif);font-size:0.9rem;font-weight:300;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold-dim);padding:0 3rem;white-space:nowrap}
+.marquee-track span.dot{color:var(--gold);padding:0;font-size:0.45rem;align-self:center;letter-spacing:0}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── PHILOSOPHY ── */
+.philosophy{padding:7rem 4rem;max-width:860px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.section-label{font-size:0.58rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.section-line{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1rem auto}
+.phil-quote{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.6rem);font-weight:300;font-style:italic;line-height:1.5;color:var(--text)}
+.phil-quote em{color:var(--gold);font-style:normal}
+.phil-attr{margin-top:2rem;font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(201,168,76,0.4)}
+
+/* ── SPOTLIGHT ITEMS ── */
+.gallery-section{padding:4rem 0 8rem;position:relative;z-index:1}
+.gallery-header{text-align:center;padding:0 2rem 5rem}
+.gallery-header h2{font-family:var(--serif);font-size:clamp(2.2rem,4.5vw,3.8rem);font-weight:300;color:var(--text);margin-top:0.5rem}
+
+.spotlight-list{display:flex;flex-direction:column;gap:0}
+.spotlight-item{
+  position:relative;min-height:88vh;
+  display:grid;grid-template-columns:1fr 1fr;align-items:center;overflow:hidden;
+  opacity:0;transform:translateY(40px);transition:opacity 0.9s ease,transform 0.9s ease;
+}
+.spotlight-item.visible{opacity:1;transform:translateY(0)}
+.spotlight-item:nth-child(even){direction:rtl}
+.spotlight-item:nth-child(even)>*{direction:ltr}
+.spotlight-item::before{content:'';position:absolute;inset:0;z-index:0}
+.spotlight-item:nth-child(odd)::before{background:linear-gradient(to right,rgba(11,11,15,0.98) 0%,rgba(6,6,8,0.85) 100%)}
+.spotlight-item:nth-child(even)::before{background:linear-gradient(to left,rgba(11,11,15,0.98) 0%,rgba(6,6,8,0.85) 100%)}
+
+.spotlight-img-wrap{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;padding:4rem 3rem;cursor:pointer}
+.spotlight-img-wrap::before{content:'';position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.12) 0%,transparent 68%);pointer-events:none}
+.spotlight-img-wrap::after{
+  content:'View Gallery';position:absolute;bottom:2.5rem;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  font-size:0.52rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);
+  background:rgba(6,6,8,0.8);padding:0.5rem 1.2rem;border:1px solid rgba(201,168,76,0.3);
+  opacity:0;transition:opacity 0.3s,transform 0.3s;pointer-events:none;white-space:nowrap;
+}
+.spotlight-item:hover .spotlight-img-wrap::after{opacity:1;transform:translateX(-50%) translateY(0)}
+.spotlight-img-wrap img{
+  position:relative;width:100%;max-width:400px;max-height:460px;object-fit:cover;
+  filter:brightness(1.02) contrast(1.04);transition:transform 0.6s ease,filter 0.6s ease;
+  display:block;
+}
+.spotlight-item:hover .spotlight-img-wrap img{transform:scale(1.03);filter:brightness(1.1) contrast(1.06)}
+
+.spotlight-info{position:relative;z-index:1;padding:4rem 5rem}
+.spotlight-item:nth-child(even) .spotlight-info{padding:4rem 5rem 4rem 3rem}
+.watch-number{font-family:var(--serif);font-size:5rem;font-weight:300;color:rgba(201,168,76,0.07);line-height:1;margin-bottom:-1rem;display:block}
+.watch-name{font-family:var(--serif);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;color:var(--text);line-height:1.1;margin-bottom:1.5rem}
+.watch-name em{font-style:italic;color:var(--gold)}
+.watch-divider{width:40px;height:1px;background:var(--gold);margin-bottom:1.5rem}
+.watch-desc{font-size:0.78rem;line-height:1.85;color:rgba(237,232,220,0.55);max-width:340px;margin-bottom:2.5rem}
+.watch-specs{display:flex;gap:2rem;flex-wrap:wrap}
+.spec-item{display:flex;flex-direction:column;gap:0.3rem}
+.spec-label{font-size:0.5rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(201,168,76,0.45)}
+.spec-val{font-family:var(--serif);font-size:1rem;color:var(--gold)}
+
+/* ── DIVIDER ── */
+.coll-divider{text-align:center;padding:4.5rem 2rem;border-top:1px solid rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.1);background:rgba(7,13,24,0.5);position:relative;z-index:1}
+.coll-divider p{font-size:0.58rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(201,168,76,0.35);margin-bottom:1rem}
+.coll-divider h3{font-family:var(--serif);font-size:clamp(1.4rem,2.8vw,2.4rem);font-weight:300;color:var(--text)}
+
+/* ── GRID GALLERY ── */
+.grid-gallery{padding:5rem 4rem;position:relative;z-index:1}
+.grid-gallery-header{text-align:center;margin-bottom:4rem}
+.grid-gallery-header h2{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,3rem);font-weight:300;color:var(--text);margin-top:0.5rem}
+.watch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:2px;max-width:1200px;margin:0 auto}
+.grid-card{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer;background:var(--dark3);opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease}
+.grid-card.visible{opacity:1;transform:translateY(0)}
+.grid-card img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease,filter 0.7s ease;filter:brightness(0.78)}
+.grid-card:hover img{transform:scale(1.06);filter:brightness(1)}
+.grid-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,8,0.96) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:2rem 1.75rem;transition:background 0.5s}
+.grid-card:hover .grid-card-overlay{background:linear-gradient(to top,rgba(6,6,8,0.98) 0%,rgba(6,6,8,0.25) 65%)}
+.grid-card-label{font-size:0.52rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;opacity:0;transform:translateY(6px);transition:opacity 0.4s,transform 0.4s}
+.grid-card:hover .grid-card-label{opacity:1;transform:translateY(0)}
+.grid-card-name{font-family:var(--serif);font-size:1.45rem;font-weight:300;color:var(--text);line-height:1.1}
+.grid-coming{background:var(--dark3);display:flex;align-items:center;justify-content:center;aspect-ratio:3/4}
+.grid-coming p:first-child{font-size:0.5rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(201,168,76,0.3);margin-bottom:0.8rem;text-align:center}
+.grid-coming p:last-child{font-family:var(--serif);font-size:1.4rem;font-weight:300;color:rgba(237,232,220,0.2);text-align:center}
+
+/* ── STORY ── */
+.story{padding:8rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:center;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.story-text h2{font-family:var(--serif);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;line-height:1.2;color:var(--text);margin:1.5rem 0 2rem}
+.story-text h2 em{font-style:italic;color:var(--gold)}
+.story-text p{font-size:0.8rem;line-height:1.95;color:rgba(237,232,220,0.55);margin-bottom:1.4rem}
+
+.story-clock-wrap{display:flex;align-items:center;justify-content:center}
+.story-clock{width:260px;height:260px}
+
+/* ── CONTACT ── */
+.contact{padding:7rem 4rem;background:rgba(7,13,24,0.6);border-top:1px solid rgba(201,168,76,0.1);position:relative;z-index:1}
+.contact-inner{max-width:680px;margin:0 auto;text-align:center}
+.contact-inner h2{font-family:var(--serif);font-size:clamp(2rem,3.8vw,3.2rem);font-weight:300;font-style:italic;color:var(--text);margin-bottom:1rem}
+.contact-inner>p{font-size:0.78rem;color:rgba(237,232,220,0.45);line-height:1.85;margin-bottom:3rem}
+.contact-form{display:flex;flex-direction:column;gap:1.2rem;text-align:left}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.form-group{display:flex;flex-direction:column;gap:0.45rem}
+.form-group label{font-size:0.56rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(201,168,76,0.55)}
+.form-group input,.form-group textarea,.form-group select{background:rgba(17,17,24,0.7);border:1px solid rgba(201,168,76,0.15);color:var(--text);font-family:var(--sans);font-size:0.76rem;font-weight:300;padding:0.9rem 1.1rem;outline:none;transition:border-color 0.3s;-webkit-appearance:none}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:rgba(201,168,76,0.45)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(237,232,220,0.2)}
+.form-group textarea{height:130px;resize:vertical}
+.form-group select option{background:var(--dark2)}
+.form-submit{margin-top:0.8rem;text-align:center}
+.form-submit button{font-family:var(--sans);font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--dark);background:var(--gold);border:none;padding:1.1rem 4rem;cursor:pointer;transition:background 0.3s,transform 0.2s}
+.form-submit button:hover{background:var(--gold-pale);transform:translateY(-1px)}
+.contact-alt{margin-top:2.5rem;font-size:0.68rem;color:rgba(237,232,220,0.3);letter-spacing:0.08em}
+.contact-alt a{color:var(--gold);text-decoration:none;transition:color 0.3s}
+.contact-alt a:hover{color:var(--gold-light)}
+
+/* ── FOOTER ── */
+footer{padding:2.5rem 4rem;border-top:1px solid rgba(201,168,76,0.08);display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.footer-brand{font-family:var(--serif);font-size:1.05rem;font-weight:300;letter-spacing:0.2em;color:var(--gold)}
+.footer-copy{font-size:0.55rem;letter-spacing:0.15em;color:rgba(237,232,220,0.2);text-transform:uppercase}
+.footer-social{display:flex;gap:1.5rem}
+.footer-social a{font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(201,168,76,0.4);text-decoration:none;transition:color 0.3s}
+.footer-social a:hover{color:var(--gold)}
+
+/* ── LIGHTBOX ── */
+.lb-overlay{
+  display:none;position:fixed;inset:0;z-index:800;
+  background:rgba(3,3,5,0.97);backdrop-filter:blur(12px);
+  flex-direction:column;align-items:center;justify-content:center;
+}
+.lb-overlay.open{display:flex}
+.lb-close{
+  position:absolute;top:1.5rem;right:2rem;background:none;border:none;
+  color:rgba(201,168,76,0.5);font-family:var(--sans);font-size:0.58rem;
+  letter-spacing:0.28em;text-transform:uppercase;cursor:pointer;
+  display:flex;align-items:center;gap:0.5rem;padding:0.5rem;transition:color 0.2s;
+}
+.lb-close::before{content:'✕';font-size:0.9rem}
+.lb-close:hover{color:var(--gold)}
+.lb-stage{position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:900px;padding:2rem 5rem;flex:1}
+.lb-stage::before{content:'';position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 65%);pointer-events:none}
+.lb-img-wrap{position:relative;max-height:70vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lb-img-wrap img{max-height:70vh;max-width:100%;object-fit:contain;display:block;opacity:0;transform:scale(0.97);transition:opacity 0.35s,transform 0.35s}
+.lb-img-wrap img.loaded{opacity:1;transform:scale(1)}
+.lb-arrow{position:absolute;top:50%;transform:translateY(-50%);background:none;border:1px solid rgba(201,168,76,0.2);color:var(--gold);width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:all 0.2s;z-index:2}
+.lb-arrow:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+.lb-arrow.prev{left:0}.lb-arrow.next{right:0}
+.lb-arrow.hidden{opacity:0;pointer-events:none}
+.lb-footer{padding:1.2rem 2rem 2rem;text-align:center;width:100%}
+.lb-watch-name{font-family:var(--serif);font-size:clamp(1.3rem,2.5vw,2rem);font-weight:300;color:var(--text);margin-bottom:0.4rem}
+.lb-counter{font-size:0.58rem;letter-spacing:0.28em;color:rgba(201,168,76,0.4);text-transform:uppercase}
+.lb-thumbs{display:flex;gap:8px;justify-content:center;margin-top:1rem;flex-wrap:wrap;padding:0 2rem}
+.lb-thumb{width:52px;height:52px;object-fit:cover;cursor:pointer;opacity:0.32;border:1px solid transparent;transition:opacity 0.2s,border-color 0.2s;flex-shrink:0}
+.lb-thumb.active{opacity:1;border-color:var(--gold)}
+.lb-thumb:hover{opacity:0.7}
+
+@media(max-width:900px){
+  nav{padding:1.2rem 1.5rem}
+  .nav-links{display:none}
+  .spotlight-item{grid-template-columns:1fr;min-height:auto}
+  .spotlight-item:nth-child(even){direction:ltr}
+  .spotlight-info{padding:2rem 2rem 3rem!important}
+  .spotlight-img-wrap{padding:3rem 2rem 1rem}
+  .story{grid-template-columns:1fr;gap:3rem;padding:5rem 2rem}
+  .story-clock-wrap{display:none}
+  .grid-gallery{padding:4rem 1.5rem}
+  .form-row{grid-template-columns:1fr}
+  .contact{padding:5rem 2rem}
+  footer{flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- BOTANICAL CANVAS -->
+<canvas id="botanicalCanvas"></canvas>
+
+<!-- SITE CORNER CLOCK -->
+<canvas id="siteClock"></canvas>
+
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lightbox" role="dialog" aria-modal="true">
+  <button class="lb-close" id="lbClose">Close</button>
+  <div class="lb-stage">
+    <button class="lb-arrow prev" id="lbPrev">&#8592;</button>
+    <div class="lb-img-wrap"><img id="lbImg" src="" alt=""></div>
+    <button class="lb-arrow next" id="lbNext">&#8594;</button>
+  </div>
+  <div class="lb-footer">
+    <p class="lb-watch-name" id="lbName"></p>
+    <p class="lb-counter" id="lbCounter"></p>
+    <div class="lb-thumbs" id="lbThumbs"></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-left">
+    <div class="logo-box">
+      <img src="images/logo.png" alt="Trong Horology" onerror="this.style.display='none'">
+      LOGO
+    </div>
+    <div class="nav-brand">Trong Horology</div>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#collection">Collection</a></li>
+      <li><a href="#story">The Story</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-clock-wrap">
+      <div class="nav-clock" id="navClock">00:00:00</div>
+      <div class="nav-date" id="navDate"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- LANDING -->
+<div id="landing">
+  <canvas id="landingClock"></canvas>
+  <div class="landing-brand">
+    <div class="landing-name">Trong Horology</div>
+    <div class="landing-sub">Est. 2024 &nbsp;·&nbsp; Handcrafted Timepieces</div>
+    <button class="landing-enter" onclick="enterSite()">Enter the Collection</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <video class="hero-video" id="heroVideo" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="images/hero-movement.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="dust" id="dust"></div>
+  <div class="hero-content">
+    <div class="hero-logo-wrap">
+      <img src="images/logo.png" alt="Trong Horology" onerror="this.style.display='none'">
+    </div>
+    <p class="hero-eyebrow">Est. 2024 &nbsp;·&nbsp; Handcrafted Timepieces</p>
+    <h1 class="hero-title">Trong<br><em>Horology</em></h1>
+    <p class="hero-subtitle">Where time becomes art</p>
+    <div class="hero-cta">
+      <a href="#collection" class="btn-primary">View Collection</a>
+      <a href="#contact" class="btn-ghost">Enquire</a>
+    </div>
+  </div>
+  <div class="scroll-ind">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span>The Archive</span><span class="dot">◆</span>
+    <span>Jour Openwork</span><span class="dot">◆</span>
+    <span>Midnight Bloom</span><span class="dot">◆</span>
+    <span>Montagne Openwork</span><span class="dot">◆</span>
+    <span>Arabic Fluted</span><span class="dot">◆</span>
+    <span>Lumière Noire</span><span class="dot">◆</span>
+    <span>Bruce Wayne Openwork</span><span class="dot">◆</span>
+    <span>Lisse Argent</span><span class="dot">◆</span>
+    <span>The Archive</span><span class="dot">◆</span>
+    <span>Jour Openwork</span><span class="dot">◆</span>
+    <span>Midnight Bloom</span><span class="dot">◆</span>
+    <span>Montagne Openwork</span><span class="dot">◆</span>
+    <span>Arabic Fluted</span><span class="dot">◆</span>
+    <span>Lumière Noire</span><span class="dot">◆</span>
+    <span>Bruce Wayne Openwork</span><span class="dot">◆</span>
+    <span>Lisse Argent</span><span class="dot">◆</span>
+  </div>
+</div>
+
+<!-- PHILOSOPHY -->
+<div class="philosophy">
+  <p class="section-label">The Atelier</p>
+  <div class="section-line"></div>
+  <p class="phil-quote">"Every piece begins as an obsession — a detail, a finish, a movement seen in passing and <em>never forgotten</em>."</p>
+  <p class="phil-attr">— Trong Horology, est. 2024</p>
+</div>
+
+<!-- SPOTLIGHT COLLECTION -->
+<section class="gallery-section" id="collection">
+  <div class="gallery-header">
+    <p class="section-label">The Collection</p>
+    <h2>Signature Pieces</h2>
+  </div>
+  <div class="spotlight-list">
+
+    <div class="spotlight-item reveal" data-watch="the-archive">
+      <div class="spotlight-img-wrap">
+        <img src="https://twhon.github.io/artileir-detuantrong/images/P-1/P1a.JPEG" alt="The Archive" loading="lazy" onerror="this.style.opacity='0.3'">
+      </div>
+      <div class="spotlight-info">
+        <span class="watch-number">01</span>
+        <h2 class="watch-name">The <em>Archive</em></h2>
+        <div class="watch-divider"></div>
+        <p class="watch-desc">A study in restraint. Clean lines reference the golden age of Swiss watchmaking while remaining unmistakably contemporary — a piece meant to be passed down.</p>
+        <div class="watch-specs">
+          <div class="spec-item"><span class="spec-label">Collection</span><span class="spec-val">Patrimoine</span></div>
+          <div class="spec-item"><span class="spec-label">Finish</span><span class="spec-val">Handcrafted</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spotlight-item reveal" data-watch="jour-openwork">
+      <div class="spotlight-img-wrap">
+        <img src="https://twhon.github.io/artileir-detuantrong/images/P-3/2.JPEG" alt="Jour Openwork" loading="lazy" onerror="this.style.opacity='0.3'">
+      </div>
+      <div class="spotlight-info">
+        <span class="watch-number">02</span>
+        <h2 class="watch-name">Jour <em>Openwork</em></h2>
+        <div class="watch-divider"></div>
+        <p class="watch-desc">The dial stripped bare — a window into the soul of the movement. Architecture and mechanics coexist in perfect choreography with every tick.</p>
+        <div class="watch-specs">
+          <div class="spec-item"><span class="spec-label">Style</span><span class="spec-val">Squelette</span></div>
+          <div class="spec-item"><span class="spec-label">Movement</span><span class="spec-val">Visible</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spotlight-item reveal" data-watch="midnight-bloom">
+      <div class="spotlight-img-wrap">
+        <img src="https://twhon.github.io/artileir-detuantrong/images/T-24/24 F.JPEG" alt="Midnight Bloom" loading="lazy" onerror="this.style.opacity='0.3'">
+      </div>
+      <div class="spotlight-info">
+        <span class="watch-number">03</span>
+        <h2 class="watch-name">Midnight <em>Bloom</em></h2>
+        <div class="watch-divider"></div>
+        <p class="watch-desc">Deep as the hour that bears its name. A dial that unfurls slowly under light — organic, vivid, and impossible to replicate. No two are alike.</p>
+        <div class="watch-specs">
+          <div class="spec-item"><span class="spec-label">Dial</span><span class="spec-val">Hand-finished</span></div>
+          <div class="spec-item"><span class="spec-label">Edition</span><span class="spec-val">Limited</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spotlight-item reveal" data-watch="montagne-openwork">
+      <div class="spotlight-img-wrap">
+        <img src="https://twhon.github.io/artileir-detuantrong/images/T-25/1.JPEG" alt="Montagne Openwork" loading="lazy" onerror="this.style.opacity='0.3'">
+      </div>
+      <div class="spotlight-info">
+        <span class="watch-number">04</span>
+        <h2 class="watch-name">Montagne <em>Openwork</em></h2>
+        <div class="watch-divider"></div>
+        <p class="watch-desc">Peaks rendered in negative space. The mountain form cut directly through the bridges — a landscape you wear on the wrist. Bold craft, quiet confidence.</p>
+        <div class="watch-specs">
+          <div class="spec-item"><span class="spec-label">Style</span><span class="spec-val">Squelette</span></div>
+          <div class="spec-item"><span class="spec-label">Design</span><span class="spec-val">Sculptural</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="coll-divider">
+  <p>The Full Archive</p>
+  <h3>Further Works from the Atelier</h3>
+</div>
+
+<!-- GRID GALLERY -->
+<div class="grid-gallery">
+  <div class="grid-gallery-header">
+    <p class="section-label">Archive</p>
+    <h2>The Complete Collection</h2>
+  </div>
+  <div class="watch-grid">
+    <div class="grid-card reveal-grid" data-watch="arabic-fluted">
+      <img src="https://twhon.github.io/artileir-detuantrong/images/T-26/4.JPEG" alt="Arabic Fluted" loading="lazy" onerror="this.style.opacity='0.2'">
+      <div class="grid-card-overlay"><span class="grid-card-label">Trong Horology</span><p class="grid-card-name">Arabic Fluted</p></div>
+    </div>
+    <div class="grid-card reveal-grid" data-watch="lumiere-noire">
+      <img src="https://twhon.github.io/artileir-detuantrong/images/T-27/1.JPEG" alt="Lumiere Noire" loading="lazy" onerror="this.style.opacity='0.2'">
+      <div class="grid-card-overlay"><span class="grid-card-label">Trong Horology</span><p class="grid-card-name">Lumière Noire</p></div>
+    </div>
+    <div class="grid-card reveal-grid" data-watch="redbull-openwork">
+      <img src="https://twhon.github.io/artileir-detuantrong/images/T-28/IMG_3466.JPEG" alt="RedBull Openwork" loading="lazy" onerror="this.style.opacity='0.2'">
+      <div class="grid-card-overlay"><span class="grid-card-label">Trong Horology</span><p class="grid-card-name">RedBull Openwork</p></div>
+    </div>
+    <div class="grid-card reveal-grid" data-watch="bruce-wayne">
+      <img src="https://twhon.github.io/artileir-detuantrong/images/P-4/IMG_3232.JPEG" alt="Bruce Wayne Openwork" loading="lazy" onerror="this.style.opacity='0.2'">
+      <div class="grid-card-overlay"><span class="grid-card-label">Trong Horology</span><p class="grid-card-name">Bruce Wayne Openwork</p></div>
+    </div>
+    <div class="grid-card reveal-grid" data-watch="debuts">
+      <img src="https://twhon.github.io/artileir-detuantrong/images/P-2/P2a.JPEG" alt="Debuts" loading="lazy" onerror="this.style.opacity='0.2'">
+      <div class="grid-card-overlay"><span class="grid-card-label">Trong Horology</span><p class="grid-card-name">Débuts</p></div>
+    </div>
+    <div class="grid-coming reveal-grid">
+      <div><p>Coming Soon</p><p>Lisse Argent</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- STORY -->
+<section class="story" id="story">
+  <div class="story-text">
+    <p class="section-label">The Maker</p>
+    <h2>A dream that <em>refused</em><br>to stay quiet</h2>
+    <p>Trong Horology was born from a single conviction: that extraordinary watchmaking shouldn't require an extraordinary budget. Each piece begins as a sketch, evolves through weeks of refinement, and ends as something meant to last generations.</p>
+    <p>Based in an independent studio, every watch is assembled, decorated, and finished by hand. No shortcuts. No compromise. Just an obsessive attention to the details that make the difference between a watch that tells time and one that tells a story.</p>
+    <a href="#contact" class="btn-ghost" style="display:inline-block;margin-top:1rem">Get in touch</a>
+  </div>
+  <div class="story-clock-wrap" aria-hidden="true">
+    <svg class="story-clock" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="130" cy="130" r="120" stroke="rgba(201,168,76,0.13)" stroke-width="1"/>
+      <circle cx="130" cy="130" r="112" stroke="rgba(201,168,76,0.07)" stroke-width="0.5"/>
+      <g id="markers"></g>
+      <circle cx="130" cy="130" r="98" fill="rgba(6,6,8,0.85)" stroke="rgba(201,168,76,0.18)" stroke-width="0.5"/>
+      <text x="130" y="100" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" font-weight="300" letter-spacing="4" fill="rgba(201,168,76,0.55)">TRONG</text>
+      <text x="130" y="115" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="7" font-weight="300" letter-spacing="3" fill="rgba(201,168,76,0.28)">HOROLOGY</text>
+      <circle cx="130" cy="130" r="4" fill="rgba(201,168,76,0.75)"/>
+      <circle cx="130" cy="130" r="2" fill="#060608"/>
+      <line id="hourHand" x1="130" y1="130" x2="130" y2="80" stroke="rgba(237,232,220,0.88)" stroke-width="2.5" stroke-linecap="round"/>
+      <line id="minuteHand" x1="130" y1="130" x2="130" y2="55" stroke="rgba(237,232,220,0.65)" stroke-width="1.5" stroke-linecap="round"/>
+      <line id="secondHand" x1="130" y1="143" x2="130" y2="48" stroke="rgba(201,168,76,0.88)" stroke-width="0.8" stroke-linecap="round"/>
+      <text x="130" y="165" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="6" font-weight="300" letter-spacing="3" fill="rgba(237,232,220,0.18)">EST. 2024</text>
+    </svg>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <p class="section-label">Enquiries</p>
+    <h2>Begin the conversation</h2>
+    <p>Whether you have a commission in mind, a question about a piece, or simply wish to know more — the studio door is always open.</p>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Your name" autocomplete="given-name"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Your surname" autocomplete="family-name"></div>
+      </div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com"></div>
+      <div class="form-group">
+        <label>Area of Interest</label>
+        <select><option value="" disabled selected>Select an option</option><option>Commission a piece</option><option>Purchase from current collection</option><option>General enquiry</option><option>Press / media</option><option>Collaboration</option></select>
+      </div>
+      <div class="form-group"><label>Message</label><textarea placeholder="Tell me what you have in mind…"></textarea></div>
+      <div class="form-submit"><button type="submit">Send Message</button></div>
+    </form>
+    <p class="contact-alt">Or write directly: <a href="mailto:TUANTNGUYENBSNS@GMAIL.COM">TUANTNGUYENBSNS@gmail.com</a> &nbsp;·&nbsp; Instagram: <a href="#">@yourhandle</a></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">Trong Horology</span>
+  <span class="footer-copy">© 2024 Trong Horology. All rights reserved.</span>
+  <div class="footer-social">
+    <a href="mailto:TUANTNGUYENBSNS@GMAIL.COM">Email</a>
+    <a href="#">Instagram</a>
+  </div>
+</footer>
+
+<script>
+function enterSite(){
+  document.getElementById('landing').classList.add('gone');
+  setTimeout(()=>document.getElementById('siteClock').classList.add('visible'), 800);
+}
+// ── WATCH DATA ──
+const WATCHES = {
+  'the-archive':       {name:'The Archive',       images:['https://twhon.github.io/artileir-detuantrong/images/P-1/P1a.JPEG']},
+  'jour-openwork':     {name:'Jour Openwork',     images:['https://twhon.github.io/artileir-detuantrong/images/P-3/2.JPEG']},
+  'midnight-bloom':    {name:'Midnight Bloom',    images:['https://twhon.github.io/artileir-detuantrong/images/T-24/24 F.JPEG']},
+  'montagne-openwork': {name:'Montagne Openwork', images:['https://twhon.github.io/artileir-detuantrong/images/T-25/1.JPEG']},
+  'arabic-fluted':     {name:'Arabic Fluted',     images:['https://twhon.github.io/artileir-detuantrong/images/T-26/4.JPEG']},
+  'lumiere-noire':     {name:'Lumière Noire',     images:['https://twhon.github.io/artileir-detuantrong/images/T-27/1.JPEG']},
+  'redbull-openwork':  {name:'RedBull Openwork',  images:['https://twhon.github.io/artileir-detuantrong/images/T-28/IMG_3466.JPEG']},
+  'bruce-wayne':       {name:'Bruce Wayne Openwork',images:['https://twhon.github.io/artileir-detuantrong/images/P-4/IMG_3232.JPEG']},
+  'debuts':            {name:'Débuts',            images:['https://twhon.github.io/artileir-detuantrong/images/P-2/P2a.JPEG']}
+};
+
+// ── BOTANICAL CANVAS ──
+(function(){
+  const canvas = document.getElementById('botanicalCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, elements=[], tick=0;
+
+  function resize(){
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
+  }
+  window.addEventListener('resize',()=>{resize();init()},{passive:true});
+
+  // color palettes
+  const leafColors=[
+    'rgba(18,52,28,0.72)','rgba(28,72,38,0.65)','rgba(14,44,24,0.7)',
+    'rgba(36,80,44,0.6)','rgba(22,60,34,0.68)','rgba(10,36,20,0.75)',
+    'rgba(44,90,52,0.55)','rgba(30,68,40,0.62)'
+  ];
+  const flowerColors=[
+    'rgba(210,140,140,0.7)','rgba(190,120,160,0.65)','rgba(240,200,160,0.6)',
+    'rgba(160,200,170,0.65)','rgba(220,180,120,0.6)','rgba(180,160,210,0.6)',
+    'rgba(240,160,180,0.65)','rgba(200,230,180,0.6)'
+  ];
+
+  function drawLeaf(ctx, x, y, angle, size, color, veinColor){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    // elegant curved leaf
+    ctx.moveTo(0,0);
+    ctx.bezierCurveTo(size*0.4,-size*0.5, size*0.9,-size*0.55, size,0);
+    ctx.bezierCurveTo(size*0.9,size*0.45, size*0.35,size*0.5, 0,0);
+    ctx.fillStyle=color;
+    ctx.fill();
+    // midrib
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.quadraticCurveTo(size*0.5,-size*0.04, size,0);
+    ctx.strokeStyle=veinColor||'rgba(30,80,40,0.4)';
+    ctx.lineWidth=0.7;
+    ctx.stroke();
+    // lateral veins
+    for(let i=1;i<=4;i++){
+      const t=i/5;
+      const mx=size*t, my=-size*0.04*Math.sin(Math.PI*t);
+      ctx.beginPath();
+      ctx.moveTo(mx,my);
+      ctx.quadraticCurveTo(mx+size*0.08,-size*0.22*t, mx+size*0.18,-size*0.3*t);
+      ctx.strokeStyle='rgba(30,80,40,0.25)';
+      ctx.lineWidth=0.4;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(mx,my);
+      ctx.quadraticCurveTo(mx+size*0.06,size*0.2*t, mx+size*0.16,size*0.28*t);
+      ctx.strokeStyle='rgba(30,80,40,0.25)';
+      ctx.lineWidth=0.4;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawFlower(ctx, x, y, size, color, centerColor){
+    ctx.save();
+    ctx.translate(x,y);
+    const petals=6;
+    for(let i=0;i<petals;i++){
+      const a=(i/petals)*Math.PI*2;
+      ctx.save();
+      ctx.rotate(a);
+      ctx.beginPath();
+      ctx.ellipse(0,-size*0.55, size*0.22, size*0.45, 0, 0, Math.PI*2);
+      ctx.fillStyle=color;
+      ctx.fill();
+      // petal vein
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.lineTo(0,-size*0.9);
+      ctx.strokeStyle='rgba(255,255,255,0.12)';
+      ctx.lineWidth=0.5;
+      ctx.stroke();
+      ctx.restore();
+    }
+    // center
+    ctx.beginPath();
+    ctx.arc(0,0,size*0.18,0,Math.PI*2);
+    ctx.fillStyle=centerColor||'rgba(240,210,120,0.8)';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0,0,size*0.09,0,Math.PI*2);
+    ctx.fillStyle='rgba(180,140,60,0.9)';
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawRosebud(ctx, x, y, size, color){
+    ctx.save();
+    ctx.translate(x,y);
+    // outer petals
+    for(let i=0;i<5;i++){
+      const a=(i/5)*Math.PI*2;
+      ctx.save();
+      ctx.rotate(a);
+      ctx.beginPath();
+      ctx.ellipse(0,-size*0.5, size*0.25, size*0.45, 0, 0, Math.PI*2);
+      ctx.fillStyle=color;
+      ctx.fill();
+      ctx.restore();
+    }
+    // inner petals
+    for(let i=0;i<5;i++){
+      const a=((i+0.5)/5)*Math.PI*2;
+      ctx.save();
+      ctx.rotate(a);
+      ctx.beginPath();
+      ctx.ellipse(0,-size*0.3, size*0.16, size*0.28, 0, 0, Math.PI*2);
+      ctx.fillStyle=color.replace('0.7','0.9');
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function drawStem(ctx, x, y, len, angle, color){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.quadraticCurveTo(Math.cos(angle+0.4)*len*0.5, Math.sin(angle+0.4)*len*0.5,
+      Math.cos(angle)*len, Math.sin(angle)*len);
+    ctx.strokeStyle=color||'rgba(28,72,36,0.5)';
+    ctx.lineWidth=1.2;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawSmallLeaf(ctx, x, y, angle, size, color){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.bezierCurveTo(size*0.3,-size*0.6, size*0.8,-size*0.65, size*0.9,0);
+    ctx.bezierCurveTo(size*0.8,size*0.55, size*0.25,size*0.52, 0,0);
+    ctx.fillStyle=color;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function createBotanicalCluster(x, y){
+    const group=[];
+    const baseAngle=Math.random()*Math.PI*2;
+    const stemLen=60+Math.random()*80;
+    const lc=leafColors[Math.floor(Math.random()*leafColors.length)];
+    const lc2=leafColors[Math.floor(Math.random()*leafColors.length)];
+    const fc=flowerColors[Math.floor(Math.random()*flowerColors.length)];
+    const fc2=flowerColors[Math.floor(Math.random()*flowerColors.length)];
+    group.push({type:'cluster', x, y, baseAngle, stemLen, lc, lc2, fc, fc2,
+      scale: 0.7+Math.random()*0.7,
+      flowerPick: Math.random(),
+      flowerSize: Math.random()*8,
+      berryOffsets: Array.from({length:5},()=>[(Math.random()-0.5)*14,(Math.random()-0.5)*14,Math.random()*2])
+    });
+    return group;
+  }
+
+  function init(){
+    elements=[];
+    // Scatter clusters across the full page, favoring edges
+    const zones=[
+      {x:0,y:0,w:0.18,h:1},    // left strip
+      {x:0.82,y:0,w:0.18,h:1}, // right strip
+      {x:0,y:0,w:1,h:0.12},    // top
+      {x:0,y:0.88,w:1,h:0.12}, // bottom
+      {x:0.1,y:0.1,w:0.8,h:0.8} // sparse center
+    ];
+    const counts=[14,14,8,8,6];
+    zones.forEach((z,zi)=>{
+      for(let i=0;i<counts[zi];i++){
+        const px=(z.x+Math.random()*z.w)*W;
+        const py=(z.y+Math.random()*z.h)*H;
+        createBotanicalCluster(px,py).forEach(e=>elements.push(e));
+      }
+    });
+  }
+
+  function drawCluster(e) {
+    const cx = e.x, cy = e.y;
+    const sc = e.scale;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(sc, sc);
+
+    drawStem(ctx,0,0,e.stemLen,e.baseAngle,'rgba(22,60,30,0.55)');
+    const tipX=Math.cos(e.baseAngle)*e.stemLen;
+    const tipY=Math.sin(e.baseAngle)*e.stemLen;
+
+    const nSide=2+Math.floor(Math.random()*2);
+    for(let i=0;i<nSide;i++){
+      const t2=(i+1)/(nSide+1);
+      const sx=Math.cos(e.baseAngle)*e.stemLen*t2;
+      const sy=Math.sin(e.baseAngle)*e.stemLen*t2;
+      const sAngle=e.baseAngle+(Math.random()>0.5?1:-1)*(0.6+Math.random()*0.6);
+      const sLen=25+Math.random()*35;
+      drawStem(ctx,sx,sy,sLen,sAngle,'rgba(22,60,30,0.4)');
+      const lx=sx+Math.cos(sAngle)*sLen*0.7;
+      const ly=sy+Math.sin(sAngle)*sLen*0.7;
+      drawSmallLeaf(ctx,lx,ly,sAngle-0.4,18+Math.random()*14,e.lc2);
+    }
+
+    drawLeaf(ctx,tipX*0.3,tipY*0.3, e.baseAngle+0.9, 30+Math.random()*20, e.lc);
+    drawLeaf(ctx,tipX*0.5,tipY*0.5, e.baseAngle-0.7, 26+Math.random()*18, e.lc2);
+    drawLeaf(ctx,tipX*0.7,tipY*0.7, e.baseAngle+1.4, 22+Math.random()*16, e.lc);
+
+    const pick=e.flowerPick;
+    if(pick<0.45){
+      drawFlower(ctx,tipX,tipY, 14+e.flowerSize, e.fc, 'rgba(240,210,120,0.85)');
+    } else if(pick<0.75){
+      drawRosebud(ctx,tipX,tipY, 12+e.flowerSize*0.6, e.fc2);
+    } else {
+      for(let b=0;b<5;b++){
+        const bx=tipX+(e.berryOffsets[b][0]);
+        const by=tipY+(e.berryOffsets[b][1]);
+        ctx.beginPath();
+        ctx.arc(bx,by,2.5+e.berryOffsets[b][2],0,Math.PI*2);
+        ctx.fillStyle=e.fc;
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    elements.forEach(e=>{ if(e.type==='cluster') drawCluster(e); });
+  }
+
+  resize();
+  init();
+  render();
+})();
+
+// ── MECHANICAL CLOCK RENDERER ──
+function buildClockCanvas(canvas, SIZE) {
+  const ctx = canvas.getContext('2d');
+  canvas.width = SIZE;
+  canvas.height = SIZE;
+  const cx = SIZE / 2, cy = SIZE / 2, R = SIZE / 2 - 4;
+
+  function draw() {
+    const now = new Date();
+    const sec = now.getSeconds() + now.getMilliseconds() / 1000;
+    const min = now.getMinutes() + sec / 60;
+    const hr  = (now.getHours() % 12) + min / 60;
+
+    ctx.clearRect(0, 0, SIZE, SIZE);
+
+    // outer bezel rings
+    for (let r = 0; r < 3; r++) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, R - r * 6, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(201,168,76,${0.65 - r * 0.12})`;
+      ctx.lineWidth = r === 0 ? 2.5 : 0.8;
+      ctx.stroke();
+    }
+
+    // guilloche sunburst
+    const guilR = R - 22;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, guilR, 0, Math.PI * 2);
+    ctx.clip();
+    for (let i = 0; i < 120; i++) {
+      const a = (i / 120) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(a) * guilR, cy + Math.sin(a) * guilR);
+      ctx.strokeStyle = 'rgba(201,168,76,0.07)';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+    for (let r2 = 20; r2 < guilR; r2 += 18) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r2, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(201,168,76,0.05)';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // tick marks
+    for (let i = 0; i < 60; i++) {
+      const a = (i / 60) * Math.PI * 2 - Math.PI / 2;
+      const isQ = i % 15 === 0, isH = i % 5 === 0;
+      const r1 = R - 10;
+      const r2 = isQ ? R - 30 : isH ? R - 23 : R - 16;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
+      ctx.lineTo(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2);
+      ctx.strokeStyle = isQ ? 'rgba(201,168,76,0.95)' : isH ? 'rgba(201,168,76,0.7)' : 'rgba(201,168,76,0.32)';
+      ctx.lineWidth = isQ ? 2.2 : isH ? 1.3 : 0.6;
+      ctx.stroke();
+    }
+
+    // roman numerals
+    const romans = ['XII','I','II','III','IV','V','VI','VII','VIII','IX','X','XI'];
+    ctx.font = `300 ${SIZE * 0.042}px "Cormorant Garamond", serif`;
+    ctx.fillStyle = 'rgba(201,168,76,0.88)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const numR = R - 46;
+    romans.forEach((num, i) => {
+      const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+      ctx.fillText(num, cx + Math.cos(a) * numR, cy + Math.sin(a) * numR);
+    });
+
+    // brand
+    ctx.font = `300 ${SIZE * 0.03}px "Montserrat", sans-serif`;
+    ctx.fillStyle = 'rgba(201,168,76,0.6)';
+    ctx.textAlign = 'center';
+    ctx.fillText('TRONG HOROLOGY', cx, cy - R * 0.22);
+    ctx.font = `300 ${SIZE * 0.019}px "Montserrat", sans-serif`;
+    ctx.fillStyle = 'rgba(201,168,76,0.35)';
+    ctx.fillText('EST. 2024', cx, cy - R * 0.13);
+
+    // hands
+    function drawHand(angle, length, width, color, hasTail) {
+      const a = angle - Math.PI / 2;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a);
+      if (hasTail) {
+        ctx.beginPath();
+        ctx.moveTo(0, length * 0.2);
+        ctx.lineTo(0, -length * 0.14);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width * 0.55;
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.moveTo(-width / 2, 0);
+      ctx.lineTo(-width * 0.12, -length);
+      ctx.lineTo(width * 0.12, -length);
+      ctx.lineTo(width / 2, 0);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, -length + 5, width * 0.3, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(201,168,76,0.7)';
+      ctx.fill();
+      ctx.restore();
+    }
+
+    drawHand((hr / 12) * Math.PI * 2,  R * 0.48, 8,   'rgba(237,232,220,0.95)', true);
+    drawHand((min / 60) * Math.PI * 2, R * 0.68, 5,   'rgba(237,232,220,0.88)', true);
+
+    // seconds
+    const sA = (sec / 60) * Math.PI * 2 - Math.PI / 2;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(sA);
+    ctx.beginPath();
+    ctx.moveTo(0, R * 0.2);
+    ctx.lineTo(0, -R * 0.74);
+    ctx.strokeStyle = 'rgba(201,168,76,0.98)';
+    ctx.lineWidth = 1.1;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.ellipse(0, R * 0.14, 4, 9, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(201,168,76,0.9)';
+    ctx.fill();
+    ctx.restore();
+
+    // center cap
+    ctx.beginPath(); ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(201,168,76,0.92)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#060608'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, 1.8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(201,168,76,0.75)'; ctx.fill();
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// landing clock — large, semi-transparent
+buildClockCanvas(
+  document.getElementById('landingClock'),
+  Math.min(window.innerWidth, window.innerHeight) * 0.84
+);
+
+// site corner clock — small, bottom-right
+buildClockCanvas(document.getElementById('siteClock'), 180);
+
+// ── HERO VIDEO ──
+(function(){
+  const v=document.getElementById('heroVideo');
+  if(!v) return;
+  v.addEventListener('canplaythrough',()=>v.classList.add('ready'),{once:true});
+  if(v.readyState>=3) v.classList.add('ready');
+  v.addEventListener('error',()=>v.style.display='none',{once:true});
+})();
+
+// ── DUST ──
+(function(){
+  const d=document.getElementById('dust');
+  for(let i=0;i<28;i++){
+    const s=document.createElement('span');
+    s.style.left=(20+Math.random()*60)+'%';
+    s.style.top=(30+Math.random()*50)+'%';
+    s.style.setProperty('--d',(6+Math.random()*8)+'s');
+    s.style.setProperty('--delay',(Math.random()*6)+'s');
+    s.style.setProperty('--dx',(Math.random()*40-20)+'px');
+    d.appendChild(s);
+  }
+})();
+
+// ── CLOCK ──
+function updateClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  const s=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('navClock').textContent=`${h}:${m}:${s}`;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('navDate').textContent=`${days[now.getDay()]} · ${months[now.getMonth()]} ${now.getDate()}`;
+
+  // story clock hands
+  const sec=now.getSeconds(), min=now.getMinutes(), hr=now.getHours()%12;
+  const sDeg=sec*6-90, mDeg=(min+sec/60)*6-90, hDeg=(hr+min/60)*30-90;
+  function rotHand(id,deg,cx,cy,len,tail){
+    const el=document.getElementById(id); if(!el) return;
+    const rad=deg*Math.PI/180;
+    el.setAttribute('x2',cx+len*Math.cos(rad));
+    el.setAttribute('y2',cy+len*Math.sin(rad));
+    if(tail){const tr=(deg+180)*Math.PI/180;el.setAttribute('x1',cx+tail*Math.cos(tr));el.setAttribute('y1',cy+tail*Math.sin(tr));}
+  }
+  rotHand('hourHand',hDeg,130,130,50);
+  rotHand('minuteHand',mDeg,130,130,75);
+  rotHand('secondHand',sDeg,130,130,82,13);
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// ── CLOCK MARKERS ──
+(function(){
+  const g=document.getElementById('markers'); if(!g) return;
+  for(let i=0;i<60;i++){
+    const a=(i/60)*360, isH=i%5===0;
+    const r1=110, r2=isH?103:107;
+    const rad=(a-90)*Math.PI/180;
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',130+r1*Math.cos(rad)); l.setAttribute('y1',130+r1*Math.sin(rad));
+    l.setAttribute('x2',130+r2*Math.cos(rad)); l.setAttribute('y2',130+r2*Math.sin(rad));
+    l.setAttribute('stroke',isH?'rgba(201,168,76,0.55)':'rgba(201,168,76,0.18)');
+    l.setAttribute('stroke-width',isH?'1.5':'0.5');
+    g.appendChild(l);
+  }
+})();
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
+},{passive:true});
+
+// ── SCROLL REVEAL ──
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach((entry,i)=>{
+    if(entry.isIntersecting){
+      setTimeout(()=>entry.target.classList.add('visible'), entry.target.classList.contains('reveal-grid')?i*80:0);
+      observer.unobserve(entry.target);
+    }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal,.reveal-grid').forEach(el=>observer.observe(el));
+
+// ── LIGHTBOX ──
+let lbImgs=[], lbIdx=0;
+const lb=document.getElementById('lightbox');
+const lbImg=document.getElementById('lbImg');
+const lbName=document.getElementById('lbName');
+const lbCounter=document.getElementById('lbCounter');
+const lbThumbs=document.getElementById('lbThumbs');
+const lbPrev=document.getElementById('lbPrev');
+const lbNext=document.getElementById('lbNext');
+
+function openLB(key){
+  const w=WATCHES[key]; if(!w) return;
+  lbImgs=w.images; lbIdx=0;
+  lbName.textContent=w.name;
+  buildThumbs(); showLBImg(0);
+  lb.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLB(){ lb.classList.remove('open'); document.body.style.overflow=''; lbImg.src=''; }
+function showLBImg(i){
+  lbIdx=i;
+  lbImg.classList.remove('loaded');
+  lbImg.src=lbImgs[i];
+  lbImg.onload=()=>lbImg.classList.add('loaded');
+  if(lbImg.complete) lbImg.classList.add('loaded');
+  lbCounter.textContent=(i+1)+' of '+lbImgs.length;
+  lbPrev.classList.toggle('hidden',i===0);
+  lbNext.classList.toggle('hidden',i===lbImgs.length-1);
+  document.querySelectorAll('.lb-thumb').forEach((t,ti)=>t.classList.toggle('active',ti===i));
+}
+function buildThumbs(){
+  lbThumbs.innerHTML='';
+  if(lbImgs.length<=1) return;
+  lbImgs.forEach((src,i)=>{
+    const img=document.createElement('img');
+    img.src=src; img.className='lb-thumb'+(i===0?' active':'');
+    img.addEventListener('click',()=>showLBImg(i));
+    lbThumbs.appendChild(img);
+  });
+}
+lbPrev.addEventListener('click',()=>{ if(lbIdx>0) showLBImg(lbIdx-1); });
+lbNext.addEventListener('click',()=>{ if(lbIdx<lbImgs.length-1) showLBImg(lbIdx+1); });
+document.getElementById('lbClose').addEventListener('click',closeLB);
+lb.addEventListener('click',e=>{ if(e.target===lb) closeLB(); });
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open')) return;
+  if(e.key==='ArrowRight'&&lbIdx<lbImgs.length-1) showLBImg(lbIdx+1);
+  if(e.key==='ArrowLeft'&&lbIdx>0) showLBImg(lbIdx-1);
+  if(e.key==='Escape') closeLB();
+});
+let touchX=0;
+lb.addEventListener('touchstart',e=>touchX=e.touches[0].clientX,{passive:true});
+lb.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-touchX;
+  if(Math.abs(dx)<40) return;
+  if(dx<0&&lbIdx<lbImgs.length-1) showLBImg(lbIdx+1);
+  if(dx>0&&lbIdx>0) showLBImg(lbIdx-1);
+},{passive:true});
+
+document.querySelectorAll('[data-watch]').forEach(el=>{
+  el.addEventListener('click',()=>openLB(el.dataset.watch));
+  el.style.cursor='pointer';
+});
+
+// ── CONTACT FORM ──
+function handleSubmit(e){
+  e.preventDefault();
+  const btn=e.target.querySelector('button');
+  const orig=btn.textContent;
+  btn.textContent='Message Sent ✓';
+  btn.style.background='rgba(201,168,76,0.25)';
+  btn.style.color='var(--gold)';
+  btn.disabled=true;
+  setTimeout(()=>{btn.textContent=orig;btn.style.background='';btn.style.color='';btn.disabled=false;e.target.reset();},4000);
+}
+</script>
+</body>
+</html>
